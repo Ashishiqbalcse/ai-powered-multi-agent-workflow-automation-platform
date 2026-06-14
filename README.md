@@ -1,104 +1,361 @@
-# AI-Powered Multi-Agent Workflow Automation Platform
+# 🚀 AI-Powered Multi-Agent Workflow Automation Platform
 
-This repository is a full-stack MVP scaffold for a multi-agent workflow system where an orchestrator breaks a user goal into subtasks, delegates work to specialist agents, streams trace events, pauses for human approval, and stores audit/cost data.
+A production-style AI workflow automation platform where multiple intelligent agents collaborate to solve complex user tasks through planning, research, analysis, execution, and synthesis.
 
-## What Is Included
+The system uses an orchestrator-driven architecture that decomposes user goals into subtasks, delegates work to specialized agents, tracks execution in real time, and maintains complete audit logs for transparency and cost monitoring.
 
-- FastAPI backend with REST and WebSocket endpoints
-- LangGraph-ready orchestrator with a deterministic fallback planner
-- Web Search, Code Execution, and Data Analysis agents
-- Human approval gate for risky or irreversible steps
-- PostgreSQL audit tables for runs, subtasks, events, API calls, and memory
-- Chroma-backed memory when an OpenAI key is configured, with database fallback
-- Cost tracker for OpenAI usage logs and per-run budget caps
-- React + Tailwind operator dashboard
-- Celery worker and Redis wiring
-- Docker Compose for local deployment
-- GitHub Actions pipeline for tests, image build, ECR push, and EC2 deploy
+---
 
-## Architecture
+## 🌐 Live Demo
 
-```mermaid
-flowchart LR
-  UI["React UI"] --> API["FastAPI API"]
-  API --> ORCH["Orchestrator Agent"]
-  ORCH --> SEARCH["Web Search Agent"]
-  ORCH --> CODE["Code Execution Agent"]
-  ORCH --> DATA["Data Analysis Agent"]
-  SEARCH --> MEMORY["Agent Memory"]
-  CODE --> MEMORY
-  DATA --> MEMORY
-  ORCH --> APPROVAL["Human Approval Gate"]
-  ORCH --> SYNTH["Result Synthesizer"]
-  API --> WS["WebSocket Trace"]
-  API --> DB["PostgreSQL Audit + Cost Logs"]
-  WORKER["Celery Worker"] --> ORCH
+### Frontend Application
+
+https://ai-powered-multi-agent-workflow-aut.vercel.app/
+
+### Backend API
+
+https://ai-powered-multi-agent-workflow-17hi.onrender.com
+
+### API Documentation
+
+https://ai-powered-multi-agent-workflow-17hi.onrender.com/docs
+
+---
+
+## 📂 GitHub Repository
+
+https://github.com/Ashishiqbalcse/ai-powered-multi-agent-workflow-automation-platform
+
+---
+
+# ✨ Key Features
+
+## Multi-Agent Architecture
+
+The platform coordinates multiple specialized AI agents that work together to solve user requests.
+
+### Included Agents
+
+- Orchestrator Agent
+- Web Search Agent
+- Data Analysis Agent
+- Code Execution Agent
+- Result Synthesizer Agent
+
+---
+
+## Intelligent Task Planning
+
+- Breaks complex goals into manageable subtasks
+- Assigns work to appropriate agents
+- Tracks execution status
+- Maintains execution history
+
+---
+
+## Real-Time Workflow Monitoring
+
+- Live execution trace
+- Agent status tracking
+- Event streaming via WebSockets
+- Detailed workflow visibility
+
+---
+
+## Search & Knowledge Retrieval
+
+- Tavily Search API Integration
+- Context-aware information retrieval
+- Multi-source research support
+- Structured result aggregation
+
+---
+
+## Human-in-the-Loop Approval
+
+For sensitive or risky actions:
+
+- Execution pause
+- Approval requests
+- Decision logging
+- Audit trail generation
+
+---
+
+## Cost Tracking & Audit Logs
+
+Tracks:
+
+- API usage
+- Agent activity
+- Workflow history
+- Execution metadata
+- Cost estimates
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                    User
+                      │
+                      ▼
+             React Frontend
+                      │
+                      ▼
+                FastAPI API
+                      │
+                      ▼
+             Orchestrator Agent
+                      │
+ ┌────────────┬────────────┬────────────┐
+ ▼            ▼            ▼            ▼
+Web Search  Data Analysis  Code Exec  Synthesizer
+ Agent         Agent        Agent       Agent
+ └────────────┴────────────┴────────────┘
+                      │
+                      ▼
+               Agent Memory
+                      │
+                      ▼
+              SQLite Database
 ```
 
-## Local Run
+---
 
-1. Copy the environment template.
+# 🛠️ Technology Stack
+
+## Frontend
+
+- React.js
+- TypeScript
+- Vite
+- Tailwind CSS
+- WebSockets
+
+## Backend
+
+- FastAPI
+- Python
+- SQLAlchemy
+- SQLite
+- Pydantic
+
+## AI & Agent Framework
+
+- Multi-Agent Architecture
+- Tavily Search API
+- Ollama (Local Development)
+- LangGraph Ready
+
+## DevOps & Deployment
+
+- GitHub
+- GitHub Actions
+- Docker
+- Docker Compose
+- Render
+- Vercel
+
+---
+
+# 📸 Screenshots
+
+## Dashboard
+
+Add screenshot:
+
+```text
+screenshots/dashboard.png
+```
+
+## Live Agent Trace
+
+Add screenshot:
+
+```text
+screenshots/live-trace.png
+```
+
+## Workflow Result
+
+Add screenshot:
+
+```text
+screenshots/result.png
+```
+
+---
+
+# ⚙️ Local Setup
+
+## Clone Repository
 
 ```bash
-cp .env.example .env
+git clone https://github.com/Ashishiqbalcse/ai-powered-multi-agent-workflow-automation-platform.git
+
+cd ai-powered-multi-agent-workflow-automation-platform
 ```
 
-2. Add provider keys in `.env` if you want live LLM planning, embeddings, or web search.
+---
+
+## Configure Environment
+
+Create a .env file:
+
+```env
+TAVILY_API_KEY=your_api_key
+OPENAI_API_KEY=your_api_key
+```
+
+---
+
+## Start Backend
 
 ```bash
-OPENAI_API_KEY=...
-TAVILY_API_KEY=...
+pip install -e .
+
+cd backend
+
+uvicorn app.main:app --reload
 ```
 
-3. Start the stack.
+Backend:
+
+```text
+http://localhost:8000
+```
+
+API Docs:
+
+```text
+http://localhost:8000/docs
+```
+
+---
+
+## Start Frontend
 
 ```bash
-docker compose up --build
+cd frontend
+
+npm install
+
+npm run dev
 ```
 
-4. Open the app and API docs.
+Frontend:
 
-- UI: http://localhost:5173
-- API docs: http://localhost:8000/docs
+```text
+http://localhost:5173
+```
 
-The app runs without provider keys by using deterministic fallbacks. Live search requires `TAVILY_API_KEY` or `SERPER_API_KEY`; LLM planning and Chroma embeddings require `OPENAI_API_KEY`.
+---
 
-## API Surface
+# 🔌 API Endpoints
 
-- `POST /api/v1/runs` creates a run and starts execution
-- `GET /api/v1/runs` lists recent runs
-- `GET /api/v1/runs/{run_id}` returns run detail, subtasks, events, and API calls
-- `POST /api/v1/runs/{run_id}/approval` approves or stops a waiting run
-- `WS /api/v1/ws/runs/{run_id}` streams live agent events
+## Create Workflow
 
-## Agent Safety Controls
+```http
+POST /api/v1/runs
+```
 
-- `MAX_ITERATIONS` prevents runaway agent loops
-- `AGENT_TIMEOUT_SECONDS` kills slow agent steps
-- `DEFAULT_BUDGET_USD` and per-run budgets hard-stop expensive runs
-- Approval gates pause execution before risky steps
-- Code execution runs in a short-lived isolated Python subprocess
+## Get Workflow Status
 
-For production-grade untrusted code execution, run the code agent inside a locked-down container, microVM, or managed sandbox.
+```http
+GET /api/v1/runs/{run_id}
+```
 
-## AWS Deployment Notes
+## List Runs
 
-The GitHub Actions workflow expects these secrets:
+```http
+GET /api/v1/runs
+```
 
-- `AWS_REGION`
-- `AWS_ROLE_TO_ASSUME`
-- `PUBLIC_API_URL`
-- `EC2_HOST`
-- `EC2_USER`
-- `EC2_SSH_KEY`
+## Approval Workflow
 
-The EC2 host should have Docker, Docker Compose, AWS CLI, and a checked-out copy of this repository at `/opt/multi-agent`. Use Amazon RDS or another managed PostgreSQL service for production data.
+```http
+POST /api/v1/runs/{run_id}/approval
+```
 
-## Suggested Next Milestones
+## Live Events
 
-1. Add a durable Redis pub/sub stream so Celery worker events reach WebSocket clients across processes.
-2. Replace fallback planning with stricter structured LLM outputs and task-specific prompts.
-3. Move code execution to container isolation with filesystem and network policies.
-4. Add PDF artifact generation and S3 upload for the resume demo.
-5. Add auth, org-level quotas, and per-user cost dashboards.
+```http
+WS /api/v1/ws/runs/{run_id}
+```
 
+---
+
+# 🔒 Safety Controls
+
+The platform includes multiple safeguards:
+
+- Maximum iteration limits
+- Agent timeout controls
+- Budget restrictions
+- Human approval gates
+- Execution monitoring
+- Error handling and recovery
+
+---
+
+# 🚀 Deployment
+
+## Frontend Deployment
+
+Hosted on:
+
+- Vercel
+
+## Backend Deployment
+
+Hosted on:
+
+- Render
+
+---
+
+# 📈 Future Enhancements
+
+### Phase 2
+
+- OpenAI Integration
+- Gemini Integration
+- PostgreSQL Migration
+- Redis Message Queue
+- Celery Workers
+
+### Phase 3
+
+- JWT Authentication
+- Role-Based Access Control
+- Multi-Tenant Support
+- Team Collaboration
+
+### Phase 4
+
+- AWS ECS Deployment
+- Kubernetes Support
+- PDF Report Generation
+- Advanced Cost Analytics
+- Enterprise Audit Dashboard
+
+---
+
+# 👨‍💻 Author
+
+**Ashish Iqbal**
+
+Computer Science Engineer
+
+GitHub:
+https://github.com/Ashishiqbalcse
+
+LinkedIn:
+(Add LinkedIn Profile)
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving it a star on GitHub.
